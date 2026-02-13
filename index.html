@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html,body{
+  height:100%;
+  overflow-x:hidden;
+  font-family:'Poppins',sans-serif;
+}
+
+/* ================= BLUR LAYER ================= */
+
+.blur-layer{
+  position:fixed;
+  inset:0;
+  backdrop-filter:blur(0px);
+  background:rgba(255,255,255,0);
+  pointer-events:none;
+  transition:.6s ease;
+  z-index:10;
+}
+.blur-layer.active{
+  backdrop-filter:blur(12px);
+  background:rgba(255,255,255,.2);
+}
+
+/* ================= GLOBAL SLIDE ================= */
+
+.slide-1,.slide-2{
+  position:relative;
+  overflow:hidden;
+}
+
+/* ================= BACKGROUND DECOR ================= */
+
+.bg-decor{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:0;
+}
+
+.decor,.sparkle,.heart{
+  position:absolute;
+  opacity:.8;
+}
+
+.decor{font-size:20px;animation:fall linear infinite;}
+.sparkle{font-size:14px;animation:rise linear infinite;}
+.heart{font-size:18px;animation:heartFloat linear infinite;}
+
+.mist{
+  position:absolute;
+  width:200%;
+  height:200%;
+  background:radial-gradient(circle, rgba(255,255,255,0.35), transparent 70%);
+  animation:mistMove 25s linear infinite;
+  opacity:.4;
+}
+
+/* 🔥 FIX DECOR TURUN SAMPAI BAWAH */
+
+@keyframes fall{
+  0%{ transform: translateY(-200px); }
+  100%{ transform: translateY(3000px); }
+}
+
+@keyframes heartFloat{
+  0%{ transform: translateY(-200px) rotate(0deg); }
+  100%{ transform: translateY(3000px) rotate(360deg); }
+}
+
+@keyframes rise{
+  0%{ transform: translateY(3000px); opacity:0; }
+  20%{opacity:1;}
+  100%{ transform: translateY(-200px); opacity:0; }
+}
+
+@keyframes mistMove{
+  0%{transform:translate(-20%,-20%);}
+  50%{transform:translate(-30%,-25%);}
+  100%{transform:translate(-20%,-20%);}
+}
+
+/* ================= SLIDE 1 ================= */
+
+.slide-1{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(180deg,#ffe4ec,#fff);
+  transition:opacity 1s ease;
+}
+
+.envelope{
+  width:260px;
+  height:170px;
+  position:relative;
+  cursor:pointer;
+  transition:transform 1.2s ease;
+  transform-style:preserve-3d;
+  z-index:2;
+}
+
+.body{
+  width:100%;
+  height:100%;
+  background:#ffb6c1;
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+.flap{
+  position:absolute;
+  top:0;
+  width:100%;
+  height:100%;
+  background:#ff8fab;
+  clip-path:polygon(0 0,50% 60%,100% 0);
+  transform-origin:top;
+  transition:transform 1s ease;
+  border-radius:12px;
+}
+
+.open-text{
+  margin-top:25px;
+  font-family:'Playfair Display',serif;
+  opacity:.7;
+  z-index:2;
+}
+
+.envelope.open{ transform:translateY(-20px); }
+.envelope.open .flap{ transform:rotateX(180deg); }
+.envelope.zoom{ transform:scale(12); transition:1s ease-in-out; }
+
+/* ================= SLIDE 2 ================= */
+
+.slide-2{
+  min-height:100vh;
+  padding:120px 20px;
+  background:linear-gradient(180deg,#fff0f5,#ffe4ec);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .6s ease;
+}
+
+.slide-2.show{
+  opacity:1;
+  visibility:visible;
+}
+
+.message-box{
+  background:#ffd6e7;
+  max-width:600px;
+  padding:35px;
+  border-radius:25px;
+  box-shadow:0 15px 40px rgba(0,0,0,.15);
+  margin-bottom:140px;
+  animation:fadeUp 1.5s ease forwards;
+  z-index:2;
+}
+
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(30px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* ================= FOTO ================= */
+
+.photo-gallery{
+  display:flex;
+  flex-direction:column;
+  gap:130px;
+  width:100%;
+  max-width:900px;
+  z-index:2;
+}
+
+.photo-frame{
+  width:190px;
+  background:#fff;
+  padding:12px 12px 45px 12px;
+  border-radius:8px;
+  box-shadow:0 25px 45px rgba(0,0,0,.35);
+  position:relative;
+  opacity:0;
+  animation:photoAppear 1.5s ease forwards;
+}
+
+.photo-frame:nth-child(odd){
+  align-self:flex-start;
+  margin-left:8%;
+}
+
+.photo-frame:nth-child(even){
+  align-self:flex-end;
+  margin-right:8%;
+}
+
+@keyframes photoAppear{
+  from{opacity:0; transform:scale(.8);}
+  to{opacity:1;}
+}
+
+.photo-frame img{
+  width:100%;
+  border-radius:6px;
+}
+
+.photo-frame span{
+  display:block;
+  text-align:center;
+  margin-top:15px;
+  font-family:'Playfair Display',serif;
+  font-size:13px;
+  letter-spacing:1px;
+  color:#555;
+}
+</style>
+</head>
+
+<body>
+
+<div class="blur-layer" id="blurLayer"></div>
+
+<audio id="whooshSound" preload="auto">
+  <source src="https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="bgMusic" loop preload="auto">
+  <source src="cihuy.mp3" type="audio/mpeg">
+</audio>
+
+<section class="slide-1" id="slide1">
+  <div class="bg-decor" id="decor1"></div>
+
+  <div class="envelope" id="envelope">
+      <div class="flap"></div>
+      <div class="body"></div>
+  </div>
+  <p class="open-text">Tap to Open</p>
+</section>
+
+<section class="slide-2" id="slide2">
+  <div class="bg-decor" id="decor2"></div>
+
+  <div class="message-box">
+      <h2>For You</h2>
+      <p>
+        if someone ask me about us, aku akan cerita tentang bagaimana kita pernah saling menemukan di waktu yg tepat. kita tumbuh, kita belajar, kita juga pernah jatuh dan bangkit dengan cara kita masing-masing. mungkin semuanya ga selalu mudah, tapi apa yg kita punya itu nyata. kamu pernah jadi rumah, jadi tempat paling nyaman setelah hari yg panjang. dan meskipun hidup terus berjalan dan banyak hal berubah, aku tetap bersyukur pernah mengenal kamu. valentine ini bukan tentang memiliki, tapi tentang menghargai. that once, we loved each other in the most honest way we could. and that will always be enough. 🤍
+      </p>
+  </div>
+
+  <div class="photo-gallery">
+      <div class="photo-frame"><img src="foto1.jpg"><span></span></div>
+      <div class="photo-frame"><img src="foto2.jpg"><span></span></div>
+      <div class="photo-frame"><img src="foto3.jpg"><span></span></div>
+      <div class="photo-frame"><img src="foto4.jpg"><span></span></div>
+  </div>
+  <a href="flower.html" class="btn-kolom" onclick="fadePage(event)">Open The Flower</a>
+
+</section>
+
+<script>
+const envelope=document.getElementById("envelope");
+const slide1=document.getElementById("slide1");
+const slide2=document.getElementById("slide2");
+const blurLayer=document.getElementById("blurLayer");
+const whoosh=document.getElementById("whooshSound");
+const bgMusic=document.getElementById("bgMusic");
+
+/* ROTATE RANDOM 10–20 DEG */
+document.querySelectorAll(".photo-frame").forEach((frame,index)=>{
+  let deg=10+Math.random()*10;
+  frame.style.transform = index%2===0
+    ? `rotate(-${deg}deg)`
+    : `rotate(${deg}deg)`;
+});
+
+/* DECOR GENERATOR */
+function generateDecor(container){
+  for(let i=0;i<25;i++){
+    let p=document.createElement("div");
+    p.className="decor";
+    p.innerHTML="🌸";
+    p.style.left=Math.random()*100+"%";
+    p.style.animationDuration=6+Math.random()*8+"s";
+    container.appendChild(p);
+  }
+  for(let i=0;i<15;i++){
+    let s=document.createElement("div");
+    s.className="sparkle";
+    s.innerHTML="✨";
+    s.style.left=Math.random()*100+"%";
+    s.style.animationDuration=5+Math.random()*6+"s";
+    container.appendChild(s);
+  }
+  for(let i=0;i<12;i++){
+    let h=document.createElement("div");
+    h.className="heart";
+    h.innerHTML="💖";
+    h.style.left=Math.random()*100+"%";
+    h.style.animationDuration=7+Math.random()*10+"s";
+    container.appendChild(h);
+  }
+  let m=document.createElement("div");
+  m.className="mist";
+  container.appendChild(m);
+}
+
+generateDecor(document.getElementById("decor1"));
+generateDecor(document.getElementById("decor2"));
+
+envelope.addEventListener("click",()=>{
+  envelope.classList.add("open");
+
+  setTimeout(()=>{
+    envelope.classList.add("zoom");
+    whoosh.volume=0.6;
+    whoosh.play();
+  },1000);
+
+  setTimeout(()=>blurLayer.classList.add("active"),1300);
+  setTimeout(()=>slide1.style.opacity="0",1700);
+
+  setTimeout(()=>{
+    slide1.style.display="none";
+    slide2.classList.add("show");
+    blurLayer.classList.remove("active");
+
+    bgMusic.volume=0;
+    bgMusic.play();
+    bgMusic.playbackRate = 1.1;
+
+    let vol=0;
+    const fade=setInterval(()=>{
+      if(vol<0.5){
+        vol+=0.05;
+        bgMusic.volume=vol;
+      }else clearInterval(fade);
+    },80);
+
+  },2200);
+  
+  function fadePage(e){
+    e.preventDefault();
+    document.body.style.opacity = 0;
+    setTimeout(()=>{
+        window.location.href = e.target.href;
+    }, 800);
+}
+});
+</script>
+
+<script src="main.js"></script>
+
+</body>
+</html>
